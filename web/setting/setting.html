@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>设置</title>
+	<link rel="stylesheet" href="me.css">
+	<link rel="stylesheet" href="normalize.css">
+</head>
+<body>
+<header>
+	<img src="return.png" onclick="history.back()" alt="设置">
+</header>
+<section>
+	<div  class="myItems"  id="sign" ><span>注销</span></div>
+	
+</section>
+<script src="../info/jquery.min.js"></script>
+<script src="picturefill.js"></script>
+<script src="../layer.js"></script>
+<script >
+	$("#sign").click(function(){
+		localStorage.removeItem('phone');
+		window.location.href="../login/log_in.html";
+
+	});
+</script>
+</body>
+</html>

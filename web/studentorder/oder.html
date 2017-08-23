@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>我</title>
+	<link rel="stylesheet" href="oder1.css">
+	<link rel="stylesheet" href="normalize.css">
+</head>
+<body>
+<header>
+	<p>我的订单</p>
+	<p>消息</p>
+</header>
+<section class="main_info_oder">
+	<div class="oder_details">
+		<ul>
+			<li class="oder_details_active" name="orders2">进行中的订单</li>
+			<li name="orders1">已取消订单</li>
+			<li name="orders3">已完成订单</li>
+		</ul>
+	</div>
+	<!-- 取消的订单 -->
+	<div class="orders  orders1" id="can">
+		<div class="oder_canceled">
+			<p>取消的订单</p>
+		</div>
+	</div>
+	<!-- 进行中的订单 -->
+	<div class="orders orders2" id="shuttle">
+		<div class="oder_canceled">
+			<p>送考订单</p>
+		</div>
+
+	</div>
+	<div class="orders orders2"  id="text">
+		<div class="oder_canceled">
+			<p>教学订单</p>
+		</div>
+
+	</div>
+	
+	<!-- 已完成订单 -->
+	<div class="orders orders3">
+		<div class="oder_canceled">
+			<p>已完成订单</p>
+		</div>
+
+	</div>
+</section>
+<div class="order">
+   	<span class="line"></span>
+   	<span class="txt">我是没有节操的分割线</span>
+   	<span class="line"></span>
+</div>
+<!-- <div class="coverd"></div> -->
+<footer class="clearfix">
+	<ul class="clearfix">
+		<li id="drive"><img src="study_drive_off.png" alt="学车"></li>
+		<li><img src="oderForm_on.png" alt="订单"></li>
+		<li><img src="practice_off.png" alt="练题"></li>
+		<li id="myinfo"><img src="me_off.png" alt="我"></li>
+	</ul>
+</footer>
+<script src="../info/jquery.min.js"></script>
+<script src="picturefill.js"></script>
+<script src="index.js"></script>
+<script src="../layer.js"></script>
+<script type="text/javascript">
+	$("#drive").click(function(){
+		window.location.href="../index/index.html";
+
+	});
+	$("#myinfo").click(function(){
+		window.location.href='../my/me.html';
+	});
+	$(function(){
+
+		var token =localStorage.phone;
+		$.ajax({
+			url:"http://wuyujia.55555.io/work/api/studentorder.php",
+			type:'post',
+			dataType:'json',
+			data:{token:token,status:status},
+			success:function(data){
+				var now=new Date();
+				var hour = now.getHours();
+				var minu = now.getMinutes();
+				var right_time=hour+minu/60;
+				if(data.status==200){
+
+					$(data.conduct['test']).each(function(){
+						var str = Date.parse(new Date())/1000;
+						var timestamp = Date.parse(this.order_time)/1000;
+						var date=(str-timestamp)/3600/24;
+						var order_id=this.order_id;
+						var time_id=this.time_id;
+						var button='<button onclick="cancel('+order_id+','+date+','+time_id+')">确认取消</button>';
+						if(date>0){
+							var a=timeF(this.time_id);
+							if(right_time<a[1] && right_time>a[0]){
+								button='<button onclick="doing('+date+')">进行中</button>';
+							}
+							if(right_time>a[1]){
+								button='<button onclick="com('+order_id+','+date+')">评价</button>';
+							}
+						}
+
+
+						var time = this.order_time.substring(5,10);
+
+						if(this.order_type=='test'){
+							this.order_type='约教'
+						}else{
+							this.order_type='送考'
+						}
+							if(this.subject=='two'){
+								this.subject='二'
+							}else{
+								this.subject='三'
+							}
+							$("#text").append("<div class='cancle_oders_list'><div class='cancle_reason clearfix'><ul><li class='appoint_time float_li1'><ul><li>"+time+"</li></ul></li><li class='head_portrait float_li1'><img  src="+this.teacher_photo+" alt='学员头像'><p>"+this.teacher_name+"</p></li><li class='subject_reason float_li1'><h3>科"+this.subject+"培训</h3><span id='time'>"+this.time_name+"</span><p>"+this.meet_address+"</p></li><li class='right_arrow float_li1'><img src='right_arrow.png' alt='向右箭头'></li></ul></div></div><div class='btn_list clearfix'><button>电话联系</button>"+button+"</div><input  class='canclew' type='hidden' name="+this.user_id+" teacher="+this.teacher_id+">");
+//						$(".button").click(function(){
+//							var token = localStorage.phone;
+//							localStorage.order_id = $(this).attr('type');
+//							localStorage.teacher_id = $(".canclew").attr('teacher');
+//							localStorage.user_id = $(".canclew").attr('name');
+//							window.location.href="../report/student_cancel_reason.html";
+//
+//						});
+
+					});
+					$(data.conduct['shuttle']).each(function(){
+						var str = Date.parse(new Date())/1000;
+						var timestamp = Date.parse(this.order_time)/1000;
+						var date=(str-timestamp)/3600/24;
+						var order_id=this.order_id;
+						var time_id=this.time_id;
+						var button='<button onclick="cancel('+order_id+','+date+','+time_id+')">确认取消</button>';
+						if(date>0){
+							var a=timeF(this.time_id);
+							if(right_time<a[1] && right_time>a[0]){
+								button='<button>进行中</button>';
+							}
+							if(right_time>a[1]){
+								button='<button onclick="com('+order_id+')">评价</button>';
+							}
+						}
+						var time = this.order_time.substring(5,10);
+						if(this.order_type=='test'){
+							this.order_type='约教'
+						}else{
+							this.order_type='送考'
+						}
+						if(this.subject=='two'){
+							this.subject='二'
+						}else{
+							this.subject='三'
+						}
+						$("#shuttle").append(" <div class='cancle_oders_list'><div class='cancle_reason clearfix'><ul><li class='appoint_time float_li1'><ul><li>"+time+"</li></ul></li><li class='head_portrait float_li1'><img src="+this.teacher_photo+" alt='学员头像'><p>"+this.teacher_name+"</p></li><li class='subject_reason float_li1'><h3>科"+this.subject+this.order_type+"</h3><span id='time'>"+this.time_name+"</span><p>"+this.meet_address+"</p></li><li class='right_arrow float_li1'><img src='right_arrow.png' alt='向右箭头'></li></ul></div></div><div class='btn_list clearfix'><button>电话联系</button >"+button+"</div>");
+
+//						$(".button").click(function(){
+//							var token = localStorage.phone;
+//							localStorage.order_id = $(this).attr('type');
+//							localStorage.teacher_id = $(".canclew").attr('teacher');
+//							localStorage.user_id = $(".canclew").attr('name');
+//							window.location.href="../report/student_cancel_reason.html";
+//
+//						});
+
+					});
+
+					$(data.clear['test']).each(function(){
+						var time = this.order_time.substring(5,10);
+						if(this.order_type=='test'){
+							this.order_type='约教'
+						}else{
+							this.order_type='送考'
+						}
+						if(this.subject=='two'){
+							this.subject='二'
+						}else{
+							this.subject='三'
+						}
+						$("#can").append("<div class='cancle_oders_list'><div class='cancle_reason clearfix'><ul><li class='appoint_time float_li1'><ul><li>"+time+"</li></ul></li><li class='head_portrait float_li1'><img src="+this.teacher_photo+" alt='学员头像'><p>"+this.teacher_name+"</p></li><li class='subject_reason float_li1'><h3>科"+this.subject+this.order_type+"</h3><span>"+this.time_name+"</span><p>"+this.cancle+"</p></li><li class='right_arrow float_li1'><img src='right_arrow.png' alt='向右箭头'></li></ul></div></div><div class='btn_list clearfix'><button>电话联系</button><button class='report' type="+this.order_id+">举报</button></div><input class='teacher_id' type='hidden' name="+this.teacher_id+">");
+						$(".report").click(function(){
+							var order_id = $(".report").attr('type');
+							localStorage.order_id=order_id;
+							window.location.href="../report/report_reason.html";
+						});
+						
+
+					});
+					$(data.clear['shuttle']).each(function(){
+						var time = this.order_time.substring(5,10);
+						if(this.order_type=='test'){
+							this.order_type='约教'
+						}else{
+							this.order_type='送考'
+						}
+						if(this.subject=='two'){
+							this.subject='二'
+						}else{
+							this.subject='三'
+						}
+						$("#can").append("<div class='orders  orders1' id='can'><div class='oder_canceled'><p>学员取消的订单</p></div><div class='cancle_oders_list'><div class='cancle_reason clearfix'><ul><li class='appoint_time float_li1'><ul><li>"+time+"</li></ul></li><li class='head_portrait float_li1'><img src="+this.teacher_photo+" alt='学员头像'><p>"+this.teacher_name+"</p></li><li class='subject_reason float_li1'><h3>科"+this.subject+this.order_type+"</h3><span>"+this.time_name+"</span><p>"+this.cancle+"</p></li><li class='right_arrow float_li1'><img src='right_arrow.png' alt='向右箭头'></li></ul></div></div><div class='btn_list clearfix'><button>电话联系</button><button>举报</button></div></div>");
+					});
+					$(data.complete).each(function(){
+						var time = this.order_time.substring(5,10);
+						if(this.order_type=='test'){
+							this.order_type='约教'
+						}else{
+							this.order_type='送考'
+						}
+						if(this.subject=='two'){
+							this.subject='二'
+						}else{
+							this.subject='三'
+						}
+						$(".orders3").append("<div class='cancle_oders_list' id='complete'><div class='cancle_reason clearfix'><ul><li class='appoint_time float_li1'><ul><li>"+time+"</li><li>16:40</li></ul></li><li class='head_portrait float_li1'><img src="+this.teacher_photo+" alt='学员头像'><p>"+this.teacher_name+"</p></li><li class='subject_reason float_li1'><h3>科"+this.subject+this.order_type+"</h3><span>"+this.time_name+"</span><p>"+this.assess+"</p></li><li class='right_arrow float_li1'><img src='right_arrow.png' alt='向右箭头'></li></ul></div></div>");
+					});
+
+
+				}
+				if(data.status==250){
+				layer.msg("请重新登录")
+				setInterval(function(){
+					window.location.href="../login/log_in.html";
+				},2000);
+				}
+			},
+			error:function(){
+				layer.msg("请求失败");
+			}
+		});
+	});
+	function timeF(t){
+		var arr=[];
+		t=parseInt(t);
+		switch (t)
+		{
+			case 1:
+				arr.push(7.25,8);
+				break;
+			case 2:
+				arr.push(8+35/60,9+1/3);
+				break;
+			case 3:
+				arr.push(9+55/60,10+40/60);
+				break;
+			case 4:
+				arr.push(11.25,12);
+				break;
+			case 5:
+				arr.push(12+35/60,13+1/3);
+				break;
+			case 6:
+				arr.push(13+55/60,14+2/3);
+				break;
+			case 7:
+				arr.push(15.25,16);
+				break;
+			case 8:
+				arr.push(16+35/60,17+1/3);
+				break;
+			case 9:
+				arr.push(17+55/60,18+2/3);
+				break;
+		}
+		return arr;
+	}
+	function cancel(order_id,date,time_id){
+		var b=timeF(time_id);
+		if(date>b[1]){
+			location.reload();
+		}
+		localStorage.order_id=order_id;
+		window.location.href='../report/student_cancel_reason.html';
+
+	}
+	function doing(date,time_id){
+		var b=timeF(time_id);
+		if(date>b[1]){
+			location.reload();
+		}
+	}
+	function com(order_id){
+		localStorage.order_id=order_id;
+		window.location.href='../comments/comments.html';
+	}
+</script>
+</body>
+</html>

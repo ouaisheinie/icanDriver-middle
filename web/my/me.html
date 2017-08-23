@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>我</title>
+	<link rel="stylesheet" href="me.css">
+	<link rel="stylesheet" href="normalize.css">
+</head>
+<body>
+<header>
+	<img src="settings.png" onclick="window.location.href='../setting/setting.html'" alt="设置">
+</header>
+<section>
+	<div onclick="window.location.href='../mytest/sign_up.html'" class="myItems"  id="sign"><img src="sign_up_me.png" alt="该图片未加载成功"><span>我的报名</span></div>
+	<div class="myItems" id="kaoshi"><img src="exam.png" alt="该图片未加载成功"><span>我要考试</span></div>
+	<div class="myItems" id="cailiao"><img src="sign_info.png" alt="该图片未加载成功"><span>提交资料</span></div>
+	<div class="myItems" id="info"><img src="realName.png" alt="该图片未加载成功"><span>实名认证</span></div>
+	<div class="myItems" id="coach"><img src="coach_apply.png" alt="该图片未加载成功"><span>教练申请</span></div>
+	<div class="myItems" id="songkao"><img src="send_test.png" alt="该图片未加载成功"><span>送考预约</span></div>
+	<div class="myItems"><img src="my_point.png" alt="该图片未加载成功"><span>我的积分</span></div>
+	<div class="myItems"><img src="his_records.png" alt="该图片未加载成功"><span>历史记录</span></div>
+	<div class="myItems"><img src="contact_server.png" alt="该图片未加载成功"><span>客服中心</span></div>
+</section>
+<footer>
+	<ul class="footer_list">
+		<li onclick="window.location.href='http://wuyujia.55555.io/work/web/index/index.html'" class="footer_list_num1">
+			<img src="study_drive_off.png" alt="学车">
+		</li>
+		<li class="footer_list_num2">
+			<img src="oderForm_off.png" alt="订单">
+		</li>
+		<li class="footer_list_num3">
+			<img src="practice_off.png" alt="练题">
+		</li>
+		<li class="footer_list_num4">
+			<img src="me_on.png" alt="我">
+		</li>
+	</ul>
+</footer>
+<script src="../info/jquery.min.js"></script>
+<script src="picturefill.js"></script>
+<script src="../layer.js"></script>
+<script >
+	$(function () {
+
+	})
+
+
+	$("#songkao").click(function(){
+		var token=localStorage.phone;
+		$.ajax({
+			url:'http://wuyujia.55555.io/work/api/checkorder.php',
+			type:'post',
+			dataType:'json',
+			data:{token:token},
+			success: function (data) {
+				if(data.status==200){
+					$("#songkao").click(function(){
+						window.location.href="../send/send-test.html";
+					});
+				}
+				else if(data.status==300){
+					layer.msg('还未约考，无法送考预约');
+				}
+			},
+			error: function () {
+				layer.msg('错误');
+			}
+		})
+	});
+	$("#info").click(function(){
+		var token = localStorage.phone;
+		$.ajax({
+			url: "http://wuyujia.55555.io/work/api/realName.php",
+			type: 'post',
+			data: {token: token},
+			dataType: 'json',
+			success: function (data) {
+				if (data.status == 200) {
+
+					layer.msg('你已实名认证过了');
+				}
+				if (data.status == 250) {
+					layer.msg("请重新登录");
+					setInterval(function () {
+						window.location.href = "../login/log_in.html";
+					}, 2000)
+				}
+				if (data.status == 400) {
+					window.location.href="../info/information.html";
+				}
+			},
+			error: function () {
+				alert("请求失败");
+			}
+		});
+
+	});
+	$("#cailiao").click(function(){
+		window.location.href="../info/baoming.php";
+	});
+	$("#coach").click(function(){
+		window.location.href="../info/coach_register.html";
+	});
+	$('.footer_list_num2').click(function () {
+		window.location.href='../studentorder/oder.html';
+	})
+
+</script>
+</body>
+</html>

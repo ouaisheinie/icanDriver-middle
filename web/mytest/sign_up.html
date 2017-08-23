@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<title>我的报名</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<link rel="stylesheet" href="sign_up.css">
+	<link rel="stylesheet" href="normalize.css">
+</head>
+<body>
+<header>
+	<ul class="clearfix">
+		<li><button onclick="history.back()" class="information_btn1"></button></li>
+		<li><p>我的报名</p></li>
+	</ul>
+</header>
+<section class="site_look">
+	<img  id = "img" src="site.png" alt="场地图片">
+</section>
+<section class="main_info_module">
+	<section class="school_address">
+		<a href="tel://15228990110"><img src="click_to_check.png" alt="点击查看"></a>
+		<h2 id="school_name">加载中..</h2>
+		<p id="school_address">驾校地址:加载中..</p>
+	</section>
+	<section class="link_man">
+		<img src="signed&refer.png" alt="报名咨询">
+		<h2>报名联系人:<span id="school_man">加载中..</span></h2>
+		<p id="man_phone">联系电话:加载中..</p>
+	</section>
+	<section class="how_to_learn">
+		<form  id="chose" class="how_to_fee">
+			<label for="input_learn_1">
+				报名方式：
+			</label>
+			<label for="input_learn_2" id="type">
+				一费制
+			</label>
+		</form>
+		<section class="material">
+			<h2>所需材料:</h2>
+			<p>居住证明(外地户口)<span>x1</span>
+			</p>
+			<p>一寸白底照片6张<span>x1</span>
+			</p>
+			<p>照相馆拍照上传回执单<span>x1</span>
+			</p>
+			<p>本人身份证复印件<span>x1</span>
+			</p>
+			<p>体检合格报告<span>x1</span>
+			</p>
+			<div class="price">
+				<p id="school_place">￥2000</p>
+			</div>
+		</section>
+	</section>
+	<section class="how_to_learn">
+		<form  id="chose" class="how_to_fee">
+			<label for="input_learn_1">
+				报名时间：
+			</label>
+			<label for="input_learn_2" id="time">
+				2017-2-4
+			</label>
+		</form>
+	</section>
+</section>
+<script src="../info/jquery.min.js"></script>
+<script src="index.js"></script>
+<script src="picturefill.js"></script>
+<script src="../layer.js"></script>
+<script>
+	$(function(){
+		var token = localStorage.phone;
+		$.ajax({
+			url:'http://wuyujia.55555.io/work/api/mytest.php',
+			dataType:'json',
+			type:'post',
+			data:{token:token},
+			success:function(data){
+				if(data.status==250){
+					layer.msg("请重新登录");
+					setInterval(function(){
+						window.location.href="../login/log_in.html";
+					},2000)
+				}
+				if(data.status==200){
+					$(data.array[0]).each(function(){
+						$("#school_name").html(this.school_name);
+						$("#school_address").html(this.school_address);
+						$("#school_man").html(this.school_man);
+						$("#man_phone").html(this.man_phone);
+						$("#type").html(this.sign_type);
+						$("#school_place").html('￥'+this.sign_place);
+						$("#time").html(this.create_time);
+						$("#img").html(this.school_img2);
+					});
+				}
+				if(data.status==400){
+					layer.msg("加载失败")
+				}
+			},
+			error:function(){
+				layer.msg("请求失败");
+			}
+		});
+	});
+</script>
+</body>
+</html>

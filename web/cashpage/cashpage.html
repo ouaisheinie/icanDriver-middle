@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" >
+	<title>支付</title>
+	<link rel="stylesheet" href="cash-in.css">
+</head>
+<body>
+<header>
+	<img onclick="history.back(0)" src="return.png" alt="返回">
+	<p>支付页面</p>
+</header>
+<section>
+	<ul>
+		<li class="how-much-money">
+			<span>提现金额:</span>
+			<input class="much" type="text" placeholder="请输入提现金额" /><strong>元</strong>
+		</li>
+		<li>
+			<form>
+				<label>
+					<span>支付宝</span>
+					<input type="radio" value="alipay" name="radio1"><i></i>
+				</label>
+				<label>
+					<span>微信</span>
+					<input type="radio" value="wechat" name="radio1"><i></i>
+				</label>
+			</form>
+		</li>
+	</ul>
+</section>
+<footer>
+	<button class="btn_comfirm">立即提现</button>
+</footer>
+<script src="http://www.heibaipig.com/front/js/jquery-1.11.0.min.js"></script>
+<script src="../jquery.min.js"></script>
+<script src="../layer.js"></script>
+<script>
+	$(function () {
+
+		var money=localStorage.money;
+		var wechat=localStorage.wechat;
+		var alipay=localStorage.alipay;
+		var way='';
+		var cash='';
+		var token=localStorage.phone;
+		$('.btn_comfirm').on('click', function () {
+
+			cash=$('.much').val();
+
+			$('input:radio[name=radio1]').each(function () {
+				if($(this).prop('checked')){
+					way=$(this).val();
+				}
+			});
+			if(cash!='' && cash>0){
+
+				if(way=='wechat' && wechat!=''){
+
+					if(money-cash>=0){
+						$.ajax({
+							url:'http://wuyujia.55555.io/work/api/cash.php',
+							type:'post',
+							dataType:'json',
+							data:{token:token,cash:cash,way:way},
+							success: function (data) {
+								if(data.status==200){
+									layer.msg('提现成功');
+									localStorage.removeItem('money');
+									localStorage.removeItem('wechat');
+									localStorage.removeItem('alipay');
+									setInterval( function () {
+										window.location.href='../cash/cash.html';
+									},1500)
+
+
+								}
+								else{
+									layer.msg('失败');
+								}
+							},
+							error: function () {
+								layer.msg('错误');
+							}
+						})
+					}else{
+
+						layer.msg('余额不足');
+					}
+				}
+				else if(way=='alipay' && alipay!=''){
+					if(money-cash>=0){
+						$.ajax({
+							url:'http://wuyujia.55555.io/work/api/cash.php',
+							type:'post',
+							dataType:'json',
+							data:{token:token,cash:cash,way:way},
+							success: function (data) {
+								if(data.status==200){
+									layer.msg('提现成功');
+									localStorage.removeItem('money');
+									localStorage.removeItem('wechat');
+									localStorage.removeItem('alipay');
+									setInterval(function () {
+										window.location.href='../cash/cash.html';
+									},1500)
+
+								}
+								else{
+									layer.msg('失败');
+								}
+							},
+							error: function () {
+								layer.msg('错误');
+							}
+						})
+					}
+					else{
+						layer.msg('余额不足');
+					}
+				}
+				else{
+					alert('请选择提现方式');
+				}
+			}
+			else{
+				alert('请选择正确的提现金额');
+			}
+
+
+
+		})
+	})
+</script>
+</body>
+</html>

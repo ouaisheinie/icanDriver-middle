@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" >
+    <title>举报</title>
+    <link rel="stylesheet" href="../vender/css/normalize.css">
+    <link rel="stylesheet" href="cancel-reason.css">
+</head>
+<body>
+<header>
+    <img onclick="history.back()" src="return.png" alt="返回">
+    <p>举报理由</p>
+</header>
+<section>
+    <ul>
+        <li>
+            <span>语言谩骂</span>
+            <form>
+                <label>
+                    <input value="语言谩骂" type="checkbox"><i></i>
+                </label>
+            </form>
+        </li>
+        <li>
+            <span>敲诈勒索</span>
+            <form>
+                <label>
+                    <input value="敲诈勒索" type="checkbox"><i></i>
+                </label>
+            </form>
+        </li>
+        <li>
+            <span>其他</span>
+            <form class="text-form">
+                <input class="text-input" type="text" placeholder="教练是个瓜娃子">
+            </form>
+        </li>
+    </ul>
+</section>
+<footer>
+    <button class="btn_comfirm">确定</button>
+</footer>
+<script src="../info/jquery.min.js"></script>
+<script src="../vender/src/picturefill.js"></script>
+<script src="../layer.js"></script>
+<script>
+    $(function () {
+        var token=localStorage.phone;
+        var content='';
+        var order_id=localStorage.order_id;
+        var reasonAll='';
+        $('.btn_comfirm').click(function () {
+            content=$('.text-input').val();
+            $('input[type=checkbox]').each(function () {
+                if($(this).prop('checked')){
+                    reasonAll+=$(this).val()+',';
+                }
+
+            });
+            reasonAll=reasonAll+content;
+            if(reasonAll!=''){
+                $.ajax({
+                    url:"http://wuyujia.55555.io/work/api/teacher_report.php",
+                    dataType:'json',
+                    type:'post',
+                    data:{token:token,reasonAll:reasonAll,order_id:order_id},
+                    success: function (data) {
+                        if(data.status==200){
+                            localStorage.removeItem("order_id");
+                            layer.msg('举报成功');
+                            setInterval(function () {
+                                window.location.href='../order/oder.html';
+                            },2000)
+                        }
+                    },
+                    error: function () {
+
+                        layer.msg('访问错误');
+                    }
+
+                })
+            }
+            else{
+                layer.msg('请至少选择一种或输入理由');
+            }
+        })
+    })
+</script>
+</body>
+</html>

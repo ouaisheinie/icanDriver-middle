@@ -1,0 +1,246 @@
+/*===========
+ie9以下浏览器提示更新样式
+=============*/
+.browserupgrade{
+	margin:0;
+	padding:0.1rem;
+	background: #ccc;
+}
+
+/*===========
+基本默认值
+=============*/
+html{
+	font-size:625%;
+	color: #222;
+	font-family: "微软雅黑";
+}
+@media only screen and (min-width: 370px) {
+	html{
+		font-size:750%;
+	}
+}
+
+::selection{
+	background-color: #b3d4fc;
+	text-shadow:none;
+}
+
+ul{
+	margin: 0;
+	padding: 0;
+}
+
+li{
+	list-style: none;
+}
+input,button,select,textarea{
+	outline:none;
+}
+/*===========
+	工具样式
+=============*/
+
+.center-block{
+	display: block;
+	margin-right: auto;
+	margin-left: auto;    /*让元素在父元素居中*/
+}
+
+.pull-right{
+	float:right !important;
+}
+
+.pull-left{
+	float:left !important;
+}
+
+.text-right{
+	text-align: right !important;
+}
+
+.text-left{
+	text-align: left !important;
+}
+
+.text-center{
+	text-align: center !important;
+}
+
+.hide{
+	display:none !important;   /*display:none; 隐藏后 元素彻底消失*/
+}
+
+.show{
+	display:block !important;
+}
+
+.invisible{
+	visibility: hidden;    /* visibility: hidden;隐藏后  元素看不到 但是还在*/
+}
+
+.text-hide{
+	font:0/0 a;
+	color:transparent;
+	text-shadow:none;
+	background-color: transparent;
+	border:0;
+}
+::-webkit-input-placeholder { color:#fff; }
+/*===========
+ 清除浮动  最终版
+=============*/
+.clearfix:before,.clearfix:after{   /*加上一个before  可以防止浏览器margin重叠*/
+    content:"";
+    display:table;
+}
+.clearfix:after{
+	clear:both;
+}
+.clearfix{
+    *zoom:1;/*IE/7/6*/
+}
+/*header*/
+header{
+	background: #fe8237;
+	height: 0.67rem;
+}
+header img,header p{
+	float: left;
+}
+header img{
+	width: 0.215rem;
+	height: 0.2rem;
+	margin:0.35rem auto auto 0.15rem;
+}
+header p{
+	font-size: 0.1778rem;
+	color: #fff;
+	margin:0.35rem auto auto calc(50% - 72px);
+	display: block;
+}
+header button{
+	width:0.3rem;
+	height: 0.23rem;
+	float: right;
+	margin-top: 0.35rem;
+	margin-right: 0.15rem;
+	border:none;
+	background: url(share1.png)no-repeat;
+	background-size: 0.3rem 0.23rem;
+}
+/*section*/
+.news{
+	font-size: 0.13rem;
+	height: 0.24rem;
+	display: flex;
+	-webkit-display:flex;
+	justify-content: space-between;
+	align-items: center;
+	background: #f6f9d3;
+	color: #f97228;
+}
+.news p{
+	margin: 0;
+	width: 90%;
+	vertical-align: middle;
+	margin-left: 0.1rem;
+}
+.news span{
+	background: url(X-1.png)no-repeat;
+	background-position: right 0.1rem center;
+	width: 10%;
+	height: 0.24rem;
+}
+/*coach*/
+.already{
+	font-size: 0.16rem;
+	font-weight: bold;
+	margin-left: 0.13rem;
+	margin-bottom: 0
+}
+.coach{
+	display: flex;
+	-webkit-display:flex;
+	height: 1rem;
+}
+.pic{
+	width: 1.2rem;
+	display: flex;
+	-webkit-display:flex;
+	justify-content: center;
+	align-items: center;
+}
+.pic img{
+	width: 0.9rem;
+	height: 0.675rem;
+}
+.message{
+	width: calc(100% - 1.2rem);
+	display: flex;
+	-webkit-display:flex;
+	flex-direction: column;
+	border-top: 1px solid #e2e2e2;
+	position: relative;
+}
+.message h4,.message p,.message span{
+	position: relative;
+	left: -0.07rem;
+}
+.coach:last-child  .message{
+	border-bottom: 1px solid #e2d2e2;
+}
+.message h4{
+	font-size: 0.16rem;
+	margin: 0;
+	margin-top: 0.1rem;
+}
+.message p{
+	font-size: 0.12rem;
+	margin: 0;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	overflow: hidden;
+	margin-top: 0.1rem;
+	padding-right: 0.1rem;
+}
+.message span{
+	font-size: 0.12rem;
+	margin: 0.07rem 0.1rem auto 0;
+	display: flex;
+	-webkit-display:flex;
+	justify-content: space-between;
+}
+.message span i{
+	font-style: normal;
+	color: #fc9b13;
+	height: 0.2rem;
+	line-height: 0.2rem;
+}
+.message span i:last-child{
+	width: 0.7rem;
+	color:#6ab494;
+	text-align:right;
+	background: url(locate.png)no-repeat 0.05rem 0.02rem;
+	background-size: 0.15rem 0.16rem;
+}
+/*footer*/
+footer{
+	height: 1rem;
+	display: flex;
+	-webkit-display:flex;
+	align-items: center;
+}
+footer button{
+	font-size: 0.16rem;
+	width: 90%;
+	border:none;
+	height: 0.38rem;	
+	color:#fff;
+	background: #fca52a;
+	position: relative;
+	left: 5%;
+	border-radius:0.1rem;
+	-webkit-border-radius:0.1rem;
+}

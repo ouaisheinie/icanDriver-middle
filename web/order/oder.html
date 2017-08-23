@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>我</title>
+	<link rel="stylesheet" href="oder1.css">
+	<link rel="stylesheet" href="normalize.css">
+</head>
+<body>
+<header>
+	<p>教学订单</p>
+	<p>消息</p>
+</header>
+<section class="main_info_oder">
+	<div class="oder_details">
+		<ul>
+			<li class="oder_details_active" name="orders2" type="conduct">进行中的订单</li>
+			<li name="orders1" type="clear" class="cancel_order" >已取消订单</li>
+			<li name="orders3" type="complete" class="over_order">已完成订单</li>
+		</ul>
+	</div>
+	<!-- 取消的订单 -->
+	<div class='orders  orders1' id="can">
+
+	</div>
+	<!-- 进行中的订单 -->
+	<div class='orders orders2' id='shuttle'>
+
+	</div>
+	 <div class='orders orders2' id='test_order'>
+
+	</div> 
+
+	<!-- 已完成订单 -->
+	<div class="orders orders3">
+		<div class="oder_canceled">
+			<p>已完成订单</p>
+		</div>
+
+	</div>
+</section>
+<div class="order">
+   	<span class="line"></span>
+   	<span class="txt">我是没有节操的分割线</span>
+   	<span class="line"></span>
+</div>
+<footer class="clearfix">
+	<ul class="clearfix">
+		<li><img src="order.png" alt="订单"><br><span>订单</span></li>
+		<li id ="plan"><img src="plan.png" alt="计划"><br><span>计划</span></li>
+		<li class="cash"><img src="wallet.png" alt="提现"><br><span>提现</span></li>
+		<li onclick="window.location.href='../coach-I/coach-me.html'"><img src="me.png" alt="我"><br><span>我</span></li>
+	</ul>
+</footer>
+<script src="../info/jquery.min.js"></script>
+<script src="picturefill.js"></script>
+<script src="index.js"></script>
+<script src="../layer.js"></script>
+<script>
+		$("#plan").click(function(){
+			window.location.href="../plan/plan_1.html";
+		});
+		$('.cash').click(function () {
+			window.location.href='../cash/cash.html'
+		});
+	$(function(){
+		var token =localStorage.phone;
+		var status =$(".oder_details_active").attr('type');
+		$.ajax({
+			url:"http://wuyujia.55555.io/work/api/teacherorder.php",
+			type:'post',
+			dataType:'json',
+			data:{token:token,status:status},
+			success:function(data){
+				var now=new Date();
+				var hour = now.getHours();
+				var minu = now.getMinutes();
+				var right_time=hour+minu/60;
+				if(data.status=200){
+					console.log(data);
+					$(data.conduct['test']).each(function(){
+						var str = Date.parse(new Date())/1000;
+						var timestamp = Date.parse(this.order_time)/1000;
+						var date=(str-timestamp)/3600/24;
+						var order_id = this.order_id;
+						var time_id=this.time_id;
+						var user_id=this.user_id;
+						var button='<button onclick="cancel('+order_id+','+2+','+date+','+time_id+','+user_id+')">确认取消</button>';
+
+						if(date>0){
+							var a=time(this.time_id);
+							if(right_time<a[1] && right_time>a[0]){
+								button='<button onclick="accept('+order_id+')">确认接单</button>';
+							}
+							if(right_time>a[1]){
+								button='<button onclick="sub('+order_id+','+1+','+date+','+time_id+')">确认完成</button>';
+							}
+						}
+
+						var timee =this.order_time.substring(5,10)
+
+						if(this.order_type=='test'){
+							this.order_type='约教'
+						}else{
+							this.order_type='送考'
+						}
+							if(this.subject=='two'){
+								this.subject='二'
+							}else{
+								this.subject='三'
+							}
+							$("#test_order").append("<div class='orders orders2' id='test_order'><div class='oder_canceled'><p>教学订单</p></div><div class='cancle_oders_list'><div class='cancle_reason clearfix'><ul><li class='appoint_time float_li1'><ul><li>"+timee+"</li></ul></li><li class='head_portrait float_li1'><img src="+this.photo+" alt=''><p>"+this.user_name+"</p></li><li class='subject_reason float_li1'><h3>科"+this.subject+this.order_type+"</h3><span>"+this.time_name+"</span><p>"+this.meet_address+"</p></li><li class='right_arrow float_li1'><img src='right_arrow.png' alt='向右箭头'></li></ul></div></div><div class='btn_list clearfix'><button>电话联系</button>"+button+"</div></div>");
+
+					});
+					$(data.conduct['shuttle']).each(function(){
+						var timee =this.order_time.substring(5,10)
+						if(this.order_type=='test'){
+							this.order_type='约教'
+						}else{
+							this.order_type='送考'
+						}
+						if(this.subject=='two'){
+							this.subject='二'
+						}else{
+							this.subject='三'
+						}
+						$("#shuttle").append("<div class='orders orders2' id='shuttle'> <div class='oder_canceled'><p>送考订单</p></div><div class='cancle_oders_list'><div class='cancle_reason clearfix'><ul><li class='appoint_time float_li1'><ul><li>"+timee+"</li></ul></li><li class='head_portrait float_li1'><img src="+this.photo+" alt=''><p>"+this.user_name+"</p></li><li class='subject_reason float_li1'><h3>科"+this.subject+this.order_type+"</h3><span>"+this.time_name+"</span><p>"+this.meet_address+"</p></li><li class='right_arrow float_li1'><img src='right_arrow.png' alt='向右箭头'></li></ul></div></div><div class='btn_list clearfix'><button>电话联系</button><button>确认取消</button></div></div>");
+
+					});
+					$(data.clear['test']).each(function(){
+						var timee =this.order_time.substring(5,10)
+						var order_ID=this.order_id;
+						if(this.order_type=='test'){
+							this.order_type='约教'
+						}else{
+							this.order_type='送考'
+						}
+						if(this.subject=='two'){
+							this.subject='二'
+						}else{
+							this.subject='三'
+						}
+						$("#can").append("<div class='orders  orders1' id='can'><div class='oder_canceled'></div><div class='cancle_oders_list'><div class='cancle_reason clearfix'><ul><li class='appoint_time float_li1'><ul><li>"+timee+"</li></ul></li><li class='head_portrait float_li1'><img src="+this.photo+" alt=''><p>"+this.user_name+"</p></li><li class='subject_reason float_li1'><h3>科"+this.subject+this.order_type+"</h3><span>"+this.time_name+"</span><p>"+this.cancle+"</p></li><li class='right_arrow float_li1'><img src='right_arrow.png' alt='向右箭头'></li></ul></div></div><div class='btn_list clearfix'><button>电话联系</button><button onclick='report("+order_ID+")'>举报</button></div></div>");
+					});
+					$(data.clear['shuttle']).each(function(){
+						var timee =this.order_time.substring(5,10)
+						var order_ID=this.order_id;
+						if(this.order_type=='test'){
+							this.order_type='约教'
+						}else{
+							this.order_type='送考'
+						}
+						if(this.subject=='two'){
+							this.subject='二'
+						}else{
+							this.subject='三'
+						}
+						$("#can").append("<div class='orders  orders1' id='can'><div class='oder_canceled'><p>学员取消的订单</p></div><div class='cancle_oders_list'><div class='cancle_reason clearfix'><ul><li class='appoint_time float_li1'><ul><li>"+time+"</li></ul></li><li class='head_portrait float_li1'><img src="+this.photo+" alt=''><p>"+this.user_name+"</p></li><li class='subject_reason float_li1'><h3>科"+this.subject+this.order_type+"</h3><span>"+this.time_name+"</span><p>"+this.cancle+"</p></li><li class='right_arrow float_li1'><img src='right_arrow.png' alt='向右箭头'></li></ul></div></div><div class='btn_list clearfix'><button>电话联系</button><button onclick='report("+order_ID+")'>举报</button></div></div>");
+					});
+					$(data.complete).each(function(){
+						var timee =this.order_time.substring(5,10)
+						if(this.order_type=='test'){
+							this.order_type='约教'
+						}else{
+							this.order_type='送考'
+						}
+						if(this.subject=='two'){
+							this.subject='二'
+						}else{
+							this.subject='三'
+						}
+						$(".orders3").append("<div class='cancle_oders_list' id='complete'><div class='cancle_reason clearfix'><ul><li class='appoint_time float_li1'><ul><li>"+timee+"</li></ul></li><li class='head_portrait float_li1'><img src="+this.photo+" alt=''><p>"+this.user_name+"</p></li><li class='subject_reason float_li1'><h3>科"+this.subject+this.order_type+"</h3><span>"+this.time_name+"</span><p>"+this.assess+"</p></li><li class='right_arrow float_li1'><img src='right_arrow.png' alt='向右箭头'></li></ul></div></div>");
+					});
+
+				}
+				if(data.status==250){
+				layer.msg("请重新登录");
+				setInterval(function(){
+					window.location.href="../login/log_in.html";
+				},2000);
+				}
+			},
+			error:function(){
+				layer.msg("请求失败");
+			}
+		});
+
+	});
+		function time(t){
+			var arr=[];
+			t=parseInt(t);
+			switch (t)
+			{
+				case 1:
+					arr.push(6.5,7.25);
+					break;
+				case 2:
+					arr.push(7+5/6,9+35/60);
+					break;
+				case 3:
+					arr.push(9+1/6,10+55/60);
+					break;
+				case 4:
+					arr.push(10.75,12.25);
+					break;
+				case 5:
+					arr.push(11+5/6,13+35/60);
+					break;
+				case 6:
+					arr.push(13+1/6,14+55/60);
+					break;
+				case 7:
+					arr.push(14.5,16.25);
+					break;
+				case 8:
+					arr.push(15+5/6,17+35/60);
+					break;
+				case 9:
+					arr.push(17+1/6,18+55/60);
+					break;
+			}
+			return arr;
+		}
+//	function accept(order_id){
+//		alert(order_id)
+//	}
+	function sub(order_id,type,date,time_id){
+		var c=time(time_id);
+		if(date>c[1]){
+			location.reload();
+		}
+		var token=localStorage.phone;
+		$.ajax({
+			url:'http://wuyujia.55555.io/work/api/updateorder.php',
+			type:'post',
+			dataType:'json',
+			data:{order_id:order_id,type:type,token:token},
+			success: function (data) {
+				console.log(data);
+				if(data.status==200){
+
+					history.go(0);
+				}
+				else{
+					alert(1)
+
+				}
+
+			},
+			error:function (){
+				layer.msg('失败');
+			}
+		})
+
+
+
+
+	}
+	function cancel(order_id,type,date,time_id){
+		var b=time(time_id);
+		if(date>b[1]){
+			location.reload();
+		}
+		localStorage.order_id=order_id;
+		localStorage.type=type;
+		window.location.href='../report/cancel_reason.html';
+
+	}
+	function report(order_id){
+			var token=localStorage.phone;
+		$.ajax({
+			url:'http://wuyujia.55555.io/work/api/teacher_report.php',
+			type:'post',
+			dataType:'json',
+			data:{token:token,order_id:order_id},
+			success: function (data) {
+				if(data.status==200){
+					layer.msg('已经举报过了');
+				}
+				else{
+					localStorage.order_id=order_id;
+					window.location.href='../report/teacher_report.html';
+				}
+			},
+			error: function () {
+				layer.msg('1')
+			}
+		})
+
+	}
+</script>
+</body>
+</html>

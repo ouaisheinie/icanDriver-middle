@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>预约送考</title>
+	<link rel="stylesheet" href="../vender/css/normalize.css">
+	<link rel="stylesheet" href="send-test.css">
+</head>
+<body>
+<header>
+	<img class="back" src="right-arrow.png" alt="返回">
+	<p>预约送考</p>
+</header>
+<section>
+	<div class="news">
+		<p>这个状态栏实时更新新闻等状态</p>
+		<span></span>
+	</div>
+	<p class='already'>预约过的教练</p>
+	<div class="main">
+
+	</div>
+
+
+</section>
+<script src="../jquery.min.js"></script>
+<script src="../vender/src/picturefill.js"></script>
+<script src="../layer.js"></script>
+<script>
+	$(function () {
+		$('.back').click(function () {
+			history.back(0);
+		})
+		var token=localStorage.phone;
+		$.ajax({
+			url:'http://wuyujia.55555.io/work/api/checkorder.php',
+			type:'post',
+			dataType:'json',
+			data:{token:token},
+			success: function (data) {
+				if(data.status==200){
+					console.log(data);
+					$(data.dataing).each(function () {
+						var teacher_id=this.teacher_id;
+						$('.main').append("<div class='coach' onclick='jump("+teacher_id+")'>"+
+								"<div class='pic'>"+
+								"<img src='"+this.teacher_photo+"' alt='教练图片'>"+
+								"</div>"+
+								"<div class='message'>"+
+								"<h4>"+this.teacher_name+"</h4>"+
+								"<p></p>"+
+								"<span><i>暂无送考</i><i>距2.4km</i></span>"+
+								"</div>"+
+								"</div>");
+					})
+
+				}
+				else{
+					layer.msg('1');
+				}
+			},
+			error: function () {
+				layer.msg('错误');
+			}
+		})
+
+
+	})
+	function jump(teacher_id){
+		 localStorage.sendteacher=teacher_id;
+		localStorage.sendtype='date';
+		window.location.href='../date_teacher2/teaching.html';
+	}
+</script>
+</body>
+</html>

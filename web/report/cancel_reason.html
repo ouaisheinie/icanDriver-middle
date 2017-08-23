@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" >
+	<title>取消</title>
+	<link rel="stylesheet" href="../vender/css/normalize.css">
+	<link rel="stylesheet" href="cancel-reason.css">
+</head>
+<body>
+<header>
+	<img onclick="history.back()" src="return.png" alt="返回">
+	<p>取消理由</p>
+</header>
+<section>
+	<ul>
+		<li>
+			<span>下错订单</span>
+			<form>
+				<label>
+					<input type="checkbox"><i></i>
+				</label>
+			</form>
+		</li>
+		<li>
+			<span>突然有事</span>
+			<form>
+				<label>
+					<input type="checkbox"><i></i>
+				</label>
+			</form>
+		</li>
+		<li>
+			<span>对方没空</span>
+			<form>
+				<label>
+					<input type="checkbox"><i></i>
+				</label>
+			</form>
+		</li>
+		<li>
+			<span>对方毁约</span>
+			<form>
+				<label>
+					<input type="checkbox"><i></i>
+				</label>
+			</form>
+		</li>
+		<li>
+			<span>难以沟通</span>
+			<form>
+				<label>
+					<input type="checkbox"><i></i>
+				</label>
+			</form>
+		</li>
+		<li>
+			<span>其他</span>
+			<form class="text-form">
+				<input class="text-input" type="text" placeholder="教练是个瓜娃子！" />
+			</form>
+		</li>
+	</ul>
+</section>
+<footer>
+	<button class="btn_comfirm">确定</button>
+</footer>
+<script src="http://www.heibaipig.com/front/js/jquery-1.11.0.min.js"></script>
+<script src="../vender/src/picturefill.js"></script>
+<script src="../layer.js"></script>
+<script>
+		$(function () {
+			var order_id=localStorage.order_id;
+			var type=localStorage.type;
+			var token=localStorage.phone;
+			var content='';
+			var one='';
+			var All='';
+			$('.btn_comfirm').click(function () {
+				content=$('.text-input').val();
+				$('input[type=checkbox]').each(function () {
+					if($(this).prop('checked')){
+						one=$(this).parent().parent().parent().find('span').html();
+						All+=one+',';
+					}
+				});
+				All=All+content;
+				if(All!=''){
+
+					$.ajax({
+					url:'http://wuyujia.55555.io/work/api/updateorder.php',
+					type:'post',
+					dataType:'json',
+					data:{order_id:order_id,type:type,token:token,reason:All},
+					success: function (data) {
+						console.log(data);
+						if(data.status==200){
+							layer.msg('取消成功');
+							setInterval(function () {
+								window.location.href='../order/oder.html';
+							},2000)
+						}
+						else{
+							alert(1)
+						}
+
+					},
+					error:function (){
+						layer.msg('失败');
+					}
+				})
+				}
+			})
+		})
+</script>
+</body>
+</html>

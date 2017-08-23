@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<title>选择驾校</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<link rel="stylesheet" href="idrive.css">
+	<link rel="stylesheet" href="normalize.css">
+</head>
+<body>
+<header class="clearfix">
+	<ul>
+		<li id="return"><img src="return.png" ></li>
+		<li><p>选择驾校</p></li>
+	</ul>
+</header>
+<div class="mainbody clearfix">
+	<p class="signUp_point">附近的报名点</p>
+	<div class="content">
+	</div>
+	<div class="searchMore">
+		<form class='form_1' action="">
+			<input class="btn_1" type="submit" value = "查看更多">
+		</form>
+	</div>
+</div>
+<footer class="clearfix">
+	<div class="footer_line1"></div>
+	<div class="footer_text"><p>成都三环以内不能练车的哟，亲</p></div>
+	<div class="footer_line2"></div>
+</footer>
+<script src="../info/jquery.min.js"></script>
+<script src="../layer.js"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=HZE4scXysMPZY1HMDTkI4cYSjRo13zZG"></script>
+<script type="text/javascript">
+
+$("#return").click(function(){
+	history.back();
+});
+$(function(){
+	var geolocation = new BMap.Geolocation();
+	geolocation.getCurrentPosition(function(r){
+		var gps_w=r.point.lat;
+		var gps_j=r.point.lng;
+		var token = localStorage.phone;
+		$.ajax({
+			url:"http://wuyujia.55555.io/work/api/schoolInfo.php",
+			data:{token:token,gps_w:gps_w,gps_j:gps_j},
+			dataType:'json',
+			type:'post',
+			success:function(data){
+				if(data.status==250){
+					layer.msg("请重新登录");
+					setInterval(function(){
+						window.location.href="../login/log_in.html";
+					},2000);
+				}
+				if(data.status==200){
+					$(data.data).each(function(){
+						$(this).each(function(){
+							var distance = Math.ceil(this.distance/1000);
+							$('.content').append("<div class='schoolMessage' school_id="+this.school_id+"><div class='mainbody_left_img'><img src="+this.school_img+"></div><div class='mainbody_right_message'><h2 id='title'>"+this.school_name+"</h2><p>"+this.school_content+"</p><div class='clearfix'><div class='sign_up'>已报名:<span class='sign_up_number'>"+this.sign_num+"</span></div><div class='distance'><img src='locate.png' alt='距离'><span class='distance_long'>距 "+distance+"km</span></div></div></div></div>");
+							$(".schoolMessage").click(function(){
+								var school_id= $(this).attr('school_id');
+								localStorage.school_id=school_id;
+								window.location.href="../sign/sign_up.html";
+							});
+						})
+					});
+				}
+				if(data.status==400){
+					layer.msg(data.msg);
+				}
+			},
+			error:function(){
+				layer.msg("请求失败");
+			}
+		});
+
+	},{enableHighAccuracy: true});
+
+
+});
+
+</script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" >
+	<title>约教定价</title>
+	<link rel="stylesheet" href="../vender/css/normalize.css">
+	<link rel="stylesheet" href="prise.css">
+</head>
+<body>
+<header>
+	<img src="return.png" class="return" alt="返回">
+	<p>约教定价</p>
+</header>
+<section>
+	<ul>
+		<li>
+			<span>科二定价</span>
+			<form>
+				<input type="text" class="mutow">元/小时
+			</form>
+		</li>
+		<li>
+			<span>科三定价</span>
+			<form>
+				<input type="text" class="muthree">元/小时
+			</form>
+		</li>
+	</ul>
+</section>
+<script src="../info/jquery.min.js"></script>
+<script src="../vender/src/picturefill.js"></script>
+<script src="../layer.js"></script>
+<script type="text/javascript">
+$(".return").click(function(){
+	var mutow = $(".mutow").val();
+	if(mutow==''){
+		layer.msg('请输入价格');
+		return false;
+	}
+	if(!/^[0-9]*$/.test(mutow)){
+		layer.msg("请输入数字");
+		return false;
+	}
+	var muthree = $(".muthree").val();
+	if(muthree==''){
+		layer.msg('请输入价格');
+		return false;
+	}
+	if(!/^[0-9]*$/.test(muthree)){
+		layer.msg("请输入数字");
+		return false;
+	}
+	var token = localStorage.phone;
+	$.ajax({
+		url:'http://wuyujia.55555.io/work/api/price.php',
+		dataType:'json',
+		data:{token:token,muthree:muthree,mutow:mutow},
+		type:'post',
+		success:function(data){
+			if(data.status==250){
+				layer.msg("请重新登录");
+				setInterval(function(){
+					window.location.href="../login/log_in.html";
+				},2000);
+		}
+		if(data.status==200){
+			history.back();
+		}
+		if(data.status==400){
+			layer.msg('操作失败');
+		}
+	},
+	error:function(){
+		layer.msg("请求失败");
+	}
+	});
+
+		
+});
+</script>
+</body>
+</html>

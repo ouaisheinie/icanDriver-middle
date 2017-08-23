@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" >
+	<title>评价</title>
+	<link rel="stylesheet" href="../vender/css/normalize.css">
+	<link rel="stylesheet" href="sign_comments.css">
+</head>
+<body>
+<header>
+	<img onclick="history.back()" src="return.png" alt="返回">
+	<p>　评价　</p>
+	<span name="sure">确定</span>
+</header>
+<section>
+	<form>
+		<textarea name="content" placeholder="请输入评价"></textarea>
+	</form>
+</section>
+<script src="../jquery.min.js"></script>
+<script src="../vender/src/picturefill.js"></script>
+<script src="../layer.js"></script>
+<script>
+		$(function () {
+			var content='';
+			var token=localStorage.phone;
+			var order_id=localStorage.order_id;
+			$('span[name=sure]').click(function () {
+				content=$('textarea[name=content]').val();
+				if(content!=''){
+					$.ajax({
+						url:"http://wuyujia.55555.io/work/api/comments.php",
+						type:'post',
+						data:{content:content,token:token,order_id:order_id},
+						dataType:'json',
+						success: function (data) {
+							if(data.status==200){
+								layer.msg('评价成功');
+								history.back();
+							}
+						},
+						error: function () {
+							layer.msg('错误');
+						}
+
+					})
+				}
+				else{
+					layer.msg('请输入评价内容');
+				}
+
+			})
+		})
+</script>
+</body>
+</html>

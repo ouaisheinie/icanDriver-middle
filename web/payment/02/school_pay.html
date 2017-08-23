@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" >
+	<title>支付</title>
+	<link rel="stylesheet" href="../vender/css/normalize.css">
+	<link rel="stylesheet" href="pay-page.css">
+</head>
+<body>
+<header>
+	<img onclick="goback()" src="return.png" alt="返回">
+	<p>支付页面</p>
+</header>
+<section>
+	<ul>
+		<li class="how-much-money">
+			<span>总计:</span>
+			<span class="place">加载中...</span>
+		</li>
+		<li>
+			<form>
+				<label >
+					<span>支付宝</span>
+					<input type="radio" name="payment_type" class="pay"  value="zfb"><i></i>
+				</label>
+				<label >
+					<span>微信</span>
+					<input type="radio" name="payment_type"  class="pay" value="wx"><i></i>
+				</label>
+			</form>
+		</li>
+	</ul>
+</section>
+<footer>
+	<button class="btn_comfirm">立即支付</button>
+</footer>
+<input type="hidden" id="place" value="zfb">
+<input type="hidden" id="token" value="<?php echo $_GET['token'] ?>">
+<input type="hidden" id="type" value="<?php echo $_GET['sign_type'] ?>">
+<input type="hidden" id="id" value="<?php echo $_GET['school_id'] ?>">
+<script src="jquery.min.js"></script>
+<script src="../vender/src/picturefill.js"></script>
+<script src="index.js"></script>
+<script src="../../layer.js"></script>
+<script type="text/javascript">
+	function goback(){
+		localStorage.removeItem("place");
+		localStorage.removeItem("sign_type");
+		history.back();
+	}
+	$(function () {
+		var place =localStorage.place;
+		$('.place').html(place+'元');
+		$(".btn_comfirm").click(function(){
+			var token =localStorage.phone;
+			var sign_type =localStorage.sign_type;
+			var school_id =localStorage.school_id;
+			var sign_place=place;
+			var payment_type='';
+			$("input[name='payment_type']").each(function () {
+				if($(this).prop('checked')){
+					payment_type=$(this).val();
+				}
+			});
+			if(payment_type==''){
+				layer.msg("请选择支付方式");
+			}else{
+				$.ajax({
+					url:"http://wuyujia.55555.io/work/api/sign.php",
+					data:{token:token,sign_type:sign_type,sign_place:sign_place,payment_type:payment_type,school_id:school_id},
+					dataType:'json',
+					type:'post',
+					success:function(data){
+						if(data.status==200){
+							$.ajax({
+								url:"http://wuyujia.55555.io/work/api/schoolBack.php",
+								data:{token:token,order_number:data.order_number},
+								dataType:'json',
+								type:'post',
+								success:function(data){
+									if(data.status==200){
+										layer.msg("报名成功");
+										localStorage.removeItem("place");
+										localStorage.removeItem("sign_type");
+										localStorage.removeItem("school_id");
+										setInterval(function () {
+											window.location.href='../../index/index.html';
+										},2000)
+									}else{
+										layer.msg("报名失败");
+									}
+								},
+								error: function () {
+									layer.msg('访问失败')
+								}
+							});
+
+						}else{
+							layer.msg("保存订单失败");
+						}
+					},
+					error:function(){
+						layer.msg("请求失败");
+					}
+				});
+			}
+
+		});
+	});
+
+	
+
+</script>
+</body>
+</html>

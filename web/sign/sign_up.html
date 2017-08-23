@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<title>我的试驾</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<link rel="stylesheet" href="sign_up.css">
+	<link rel="stylesheet" href="normalize.css">
+</head>
+<body>
+<header>
+	<ul class="clearfix">
+		<li><button class="information_btn1"></button></li>
+		<li><p>我的试驾</p></li>
+	</ul>
+</header>
+<section class="site_look">
+	<img src="site.png" alt="场地图片">
+</section>
+<section class="main_info_module">
+	<section class="school_address">
+		<img src="click_to_check.png" alt="点击查看">
+		<h2 id="school_name">加载中..</h2>
+		<p id="school_address">驾校地址:加载中..</p>
+	</section>
+	<section class="link_man">
+		<img src="signed&refer.png" alt="报名咨询">
+		<h2>报名联系人:<span id="school_man">加载中..</span></h2>
+		<p id="man_phone">联系电话:加载中..</p>
+	</section>
+	<section class="how_to_learn">
+		<form  id="chose" class="how_to_fee">
+			<label for="input_learn_1">
+				计时学车<input id="input_learn_1" type="radio" name="sign_type" value="rntime" disabled /><i></i>
+			</label>
+			<label for="input_learn_2">
+				一费制<input id="input_learn_2" type="radio" value="one" name="sign_type" checked disabled /><i></i>
+			</label>
+		</form>
+		<section class="material">
+			<h2>所需材料:</h2>
+			<p>居住证明(外地户口)<span>x1</span>
+			</p>
+			<p>一寸白底照片6张<span>x1</span>
+			</p>
+			<p>照相馆拍照上传回执单<span>x1</span>
+			</p>
+			<p>本人身份证复印件<span>x1</span>
+			</p>
+			<p>体检合格报告<span>x1</span>
+			</p>
+			<div class="price">
+				<p id="school_place">加载中...</p>
+			</div>
+		</section>
+		<form class="server_final">
+			<label for="checked1">
+				<input id ="checked1" type="checkbox" name="check1" checked/><i></i>随时退
+			</label>
+			<label for="checked2">
+				<input id ="checked2" type="checkbox" name="check2" checked/><i></i>免预约
+			</label>
+			<label for="checked3">
+				<input id ="checked3" type="checkbox" name="check3" checked/><i></i>接送服务
+			</label>
+		</form>
+	</section>
+	<section class="footer_submit">
+		<form>
+			<input type="button" value="立即报名">
+		</form>
+	</section>
+</section>
+<script src="../info/jquery.min.js"></script>
+<script src="index.js"></script>
+<script src="picturefill.js"></script>
+<script src="../layer.js"></script>
+<script>
+	$(function () {
+		var token =localStorage.phone;
+		var school_id =localStorage.school_id;
+		$.ajax({
+			url:"http://wuyujia.55555.io/work/api/schoolInfo.php",
+			data:{token:token,school_id:school_id},
+			dataType:'json',
+			type:'post',
+			success:function(data){
+				if(data.status){
+					$('#school_name').html(data.data.school_name);
+					$('#school_address').html(data.data.school_address);
+					$('#school_man').html(data.data.school_man);
+					$('#man_phone').html('联系电话:'+data.data.man_phone);
+					$('#school_place').html("<del>￥"+data.data.school_place2+"</del>￥"+data.data.school_place1);
+					$('#chose input').prop('disabled',false);
+					var place=data.data.school_place1;
+					$("#chose label").click(function () {
+						if($(this).find('input').val()=='one'){
+							$('#school_place').html("<del>￥"+data.data.school_place2+"</del>￥"+data.data.school_place1);
+							place=data.data.school_place1;
+						}else{
+							$('#school_place').html("<del>￥"+data.data.school_place1+"</del>￥"+data.data.school_place2);
+							place=data.data.school_place2;
+						}
+					});
+					$("input[type='button']").click(function () {
+						localStorage.place=place;
+						var sign_type='';
+						$("input[name='sign_type']").each(function () {
+							if($(this).prop('checked')){
+								sign_type=$(this).val();
+							}
+						})
+						localStorage.sign_type=sign_type;
+						window.location.href='../payment/02/school_pay.html';
+					})
+				}else{
+					layer.msg("数据获取失败");
+				}
+			},
+			error: function () {
+				layer.msg('访问失败');
+			}
+		});
+	})
+</script>
+</body>
+</html>

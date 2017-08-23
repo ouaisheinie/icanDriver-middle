@@ -1,0 +1,263 @@
+/*===========
+ie9以下浏览器提示更新样式
+=============*/
+.browserupgrade{
+	margin:0;
+	padding:0.1rem;
+	background: #ccc;
+}
+
+/*===========
+基本默认值
+=============*/
+html{
+	font-size:625%;
+	color: #222;
+	font-family: "微软雅黑";
+}
+@media only screen and (min-width: 370px) {
+	html{
+		font-size:750%;
+	}
+}
+
+::selection{
+	background-color: #b3d4fc;
+	text-shadow:none;
+}
+
+ul{
+	margin: 0;
+	padding: 0;
+}
+
+li{
+	list-style: none;
+}
+input,button,select,textarea{
+	outline:none;
+}
+/*===========
+	工具样式
+=============*/
+
+.center-block{
+	display: block;
+	margin-right: auto;
+	margin-left: auto;    /*让元素在父元素居中*/
+}
+
+.pull-right{
+	float:right !important;
+}
+
+.pull-left{
+	float:left !important;
+}
+
+.text-right{
+	text-align: right !important;
+}
+
+.text-left{
+	text-align: left !important;
+}
+
+.text-center{
+	text-align: center !important;
+}
+
+.hide{
+	display:none !important;   /*display:none; 隐藏后 元素彻底消失*/
+}
+
+.show{
+	display:block !important;
+}
+
+.invisible{
+	visibility: hidden;    /* visibility: hidden;隐藏后  元素看不到 但是还在*/
+}
+
+.text-hide{
+	font:0/0 a;
+	color:transparent;
+	text-shadow:none;
+	background-color: transparent;
+	border:0;
+}
+::-webkit-input-placeholder { color:#bababa; }
+/*===========
+ 清除浮动  最终版
+=============*/
+.clearfix:before,.clearfix:after{   /*加上一个before  可以防止浏览器margin重叠*/
+    content:"";
+    display:table;
+}
+.clearfix:after{
+	clear:both;
+}
+.clearfix{
+    *zoom:1;/*IE/7/6*/
+}
+/*header*/
+header{
+	background: #fe8334;
+	height:0.67rem;
+	display: flex;
+	-webkit-display:flex;
+	justify-content: space-between;
+}
+header p{
+	font-size: 0.1778rem;
+	margin: 0.335rem auto auto 0.175rem;
+	color: #fff;
+}
+header span{
+	font-size: 0.14225rem;
+	margin: 0.38rem 0.175rem auto auto;
+	color: #fff;
+}
+/*section*/
+/*left-money*/
+.left-money{
+	height: 1.3rem;
+	display: flex;
+	-webkit-display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+.left-money h3{
+	margin: 0;
+	font-size: 0.1778rem;
+	font-weight: normal;
+	margin-left:  0.2rem;
+}
+.left-money span{
+	font-size: 0.5927rem;
+	margin-left: 0.13rem;
+	margin-top: 0.1rem;
+	color: #fe8334;
+}
+/*income-details*/
+.income-details{
+	height: 0.2rem;
+	line-height: 0.2rem;
+	font-size: 0.1067rem;
+	color: #fff;
+	background: #5c5c5c;
+	padding-left: 0.21rem;
+}
+.income-details p{
+	margin: 0;
+	display: block;
+	width: 80%;
+	float: left;
+}
+.income-details i{
+	display: block;
+	float: right;
+	width: 0.12rem;
+	height: 0.08rem;
+	margin: 0.05rem 0.2rem auto auto;
+	background: url(down-arrow.png)no-repeat;
+	background-size: 0.12rem 0.08rem;
+}
+.every-income{
+	font-size: 0.1067rem;
+	height: 0.78rem;
+	background: #5c5c5c;
+	color:#fff;
+	display: none;
+}
+.every-income ul{
+	height: 0.78rem;
+}
+.every-income ul li{
+	height: 0.26rem;
+	line-height: 0.26rem;
+	display: flex;
+	-webkit-display: flex;
+	justify-content: space-between;
+}
+.every-income ul li span:first-child{
+	margin-left: 0.21rem;
+}
+.every-income ul li span:last-child{
+	margin-right: 0.2rem;
+}
+/*cash-sum*/
+.cash-sum ul li{
+	height: 0.44rem;
+	display: flex;
+	-webkit-display:flex;
+	align-items: center;
+	justify-content: space-between;
+	border-bottom: 1px solid #dfdfdf;
+}
+.cash-sum ul li:first-child{
+	border-top:4px solid #ebebeb;
+}
+.cash-sum ul li span{
+	width: 25%;
+	font-size: 0.14225rem;
+	display: flex;
+	-webkit-display:flex;
+	justify-content: flex-start;
+}
+.cash-sum ul li span i{
+	display: block;
+	margin:auto 12px;
+	width: 0.155rem;
+	height: 0.165rem;
+	background: url(cash.png)no-repeat;
+	background-size: 0.155rem 0.165rem;
+	position: relative;
+	bottom: 1px;
+}
+.sum-2{
+	display: block !important;
+	margin-right: 0.12rem !important;
+	width: 0.155rem !important;
+	height: 0.165rem !important;
+	background: url(sum.png)no-repeat !important;
+	background-size: 0.155rem 0.165rem !important;
+	position: relative !important;
+	bottom: 1px !important;
+}
+.cash-sum ul li i{
+	width: 0.08rem;
+	height: 0.13rem;
+	background: url(right-arrow.png)no-repeat;
+	background-size: 0.08rem 0.13rem;
+	margin-right: 0.24rem;
+}
+/*footer*/
+footer{
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	border-top: 1px solid #e6e6e6;
+}
+footer ul{
+	height: 0.6rem;
+	display: flex;
+	-webkit-display: flex;
+	width: 100%;
+}
+footer ul li{
+	width: 25%;
+	display: flex;
+	-webkit-display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+footer ul li img{
+	width: 0.25rem;
+	height: 0.29rem;
+}
+footer ul li span{
+	font-size: 0.10667rem;
+	margin-top: 0.05rem;
+}

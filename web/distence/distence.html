@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" >
+	<title>支付</title>
+	<link rel="stylesheet" href="cash-in.css">
+	<style type="text/css">
+		body, html{width: 100%;height: 100%;margin:0;font-family:"微软雅黑";}
+		#allmap{height:500px;width:100%;}
+	</style>
+</head>
+<body>
+<header>
+	<img class="back" src="return.png" alt="返回">
+	<p>约教范围</p>
+</header>
+<div id="allmap"></div>
+
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=HZE4scXysMPZY1HMDTkI4cYSjRo13zZG"></script>
+<script type="text/javascript" src="../jquery.min.js"></script>
+<script type="text/javascript" src="../layer.js"></script>
+<script type="text/javascript">
+	$(function () {
+		var token=localStorage.phone;
+		var gps_j='';
+		var gps_w='';
+		$.ajax({
+			url:'http://wuyujia.55555.io/work/api/distence.php',
+			type:'post',
+			dataType:'json',
+			data:{token:token},
+			success: function (data) {
+				if(data.status==200){
+					$(data.list).each(function () {
+						gps_j=this.gps_j;
+						gps_w=this.gps_w;
+						// 百度地图API功能
+						var map = new BMap.Map("allmap");
+						var point = new BMap.Point(gps_j, gps_w);
+						map.centerAndZoom(point, 13);
+						var marker = new BMap.Marker(new BMap.Point(gps_j, gps_w)); // 创建点
+						var circle = new BMap.Circle(point,5000,{fillColor:"blue", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
+						map.addOverlay(circle);
+						map.addOverlay(marker);            //增加点
+						map.addOverlay(circle);            //增加圆
+						var newGpsJ=gps_j;
+						var newGpsW=gps_w;
+						function showInfo(e){
+							map.clearOverlays();
+							var new_point = new BMap.Point(e.point.lng,e.point.lat);
+							var marker = new BMap.Marker(new_point);  // 创建标注
+							var circle = new BMap.Circle(new_point,5000,{fillColor:"blue", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
+							map.addOverlay(marker);
+							map.addOverlay(circle); // 将标注添加到地图中
+							map.panTo(new_point);
+							newGpsJ=e.point.lng;
+							newGpsW=e.point.lat;
+						}
+						map.addEventListener("click", showInfo);
+
+						$('.back').on('click', function () {
+
+							if(newGpsJ!=gps_j || newGpsW!=gps_w){
+								$.ajax({
+									url:'http://wuyujia.55555.io/work/api/savedistence.php',
+									type:'post',
+									dataType:'json',
+									data:{token:token,gps_j:newGpsJ,gps_w:newGpsW},
+									success: function (data) {
+										if(data.status==200){
+											window.location.href='../coach-I/coach-me.html';
+										}
+									},
+									error: function () {
+										layer.msg('错误');
+									}
+								});
+							}else{
+								history.back();
+							}
+						})
+
+					})
+				}
+				else{
+				}
+			},
+			error: function () {
+				layer.msg('错误');
+			}
+		});
+
+	});
+</script>
+</body>
+</html>

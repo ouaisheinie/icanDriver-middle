@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>我</title>
+	<link rel="stylesheet" href="oder1.css">
+	<link rel="stylesheet" href="normalize.css">
+</head>
+<body>
+<header>
+	<p>提现明细</p>
+	<p onclick="history.back(0)">返回</p>
+</header>
+<section class="main_info_oder">
+	<!--<div class="oder_details">-->
+		<!--<ul>-->
+			<!--<li class="oder_details_active" name="orders2" type="conduct">进行中的订单</li>-->
+			<!--&lt;!&ndash;<li name="orders1" type="clear" class="cancel_order" >已取消订单</li>&ndash;&gt;-->
+			<!--&lt;!&ndash;<li name="orders3" type="complete" class="over_order">已完成订单</li>&ndash;&gt;-->
+		<!--</ul>-->
+	<!--</div>-->
+	<!-- 取消的订单 -->
+
+	<div class='orders orders2' id='shuttle'>
+
+	</div>
+</section>
+
+
+<script src="../info/jquery.min.js"></script>
+<script src="picturefill.js"></script>
+<script src="index.js"></script>
+<script src="../layer.js"></script>
+<script>
+	$(function () {
+		var token=localStorage.phone;
+		var teacher_id=localStorage.teacher_id;
+		$.ajax({
+			url:'http://wuyujia.55555.io/work/api/detail.php',
+			data:{token:token,teacher_id:teacher_id},
+			type:'post',
+			dataType:'json',
+			success: function (data) {
+				if(data.status==200){
+					console.log(data);
+					$(data.dataing).each(function () {
+						console.log(this.money);
+						$('#shuttle').append("<div class='cancle_oders_list'><div class='cancle_reason clearfix'><ul><li class='head_portrait float_li1'> <p>"+this.money+"</p> </li><li class='subject_reason float_li1'> <h3>"+this.cash_date+"</h3> <p>"+this.pay_way+"</p></li></ul></div></div>")
+
+					})
+				}
+			},
+			error: function () {
+				layer.msg('错误')
+			}
+		})
+	})
+</script>
+</body>
+</html>
